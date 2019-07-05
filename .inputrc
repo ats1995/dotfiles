@@ -11,15 +11,21 @@ TAB: menu-complete
 "\e[Z": menu-complete-backward
 
 # emacs mode
-"\e[A": history-search-forward
-"\e[B": history-search-backward
+"\e[A": history-search-backward
+"\e[B": history-search-forward
 
 # vi mode
 set editing-mode vi
-set keymap vi-insert
 $if mode=vi
 set keymap vi-command
+# these are for vi-command mode
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+set keymap vi-insert
+# these are for vi-insert mode
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+"\C-l": clear-screen
 "\C-n": next-history
 "\C-p": previous-history
-"\C-l": clear-screen
 $endif
