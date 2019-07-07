@@ -1,4 +1,5 @@
 alias aptul='echo "sudo apt update" && sudo apt update && echo "apt list --upgradable" && apt list --upgradable'
+alias aptull='echo "sudo apt update && apt list --upgradable" && sudo apt update && apt list --upgradable'
 alias au='echo "sudo apt upgrade" && sudo apt upgrade'
 alias ipaddr='ip -c addr'
 alias ipa='ip -c addr'
