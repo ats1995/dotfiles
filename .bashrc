@@ -123,3 +123,8 @@ HISTTIMEFORMAT='%F %T'
 # Change the file location because certain bash sessions truncate .bash_history file upon close.
 # http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
 HISTFILE=~/.bashhist
+
+fco()
+{
+    find $1 -type f -print | wc -l
+}
