@@ -1,6 +1,5 @@
 alias aptul='echo "sudo apt update && apt list --upgradable" && sudo apt update && apt list --upgradable'
 alias au='echo "sudo apt upgrade" && sudo apt upgrade'
-alias ipaddr='ip -c addr'
 alias ipa='ip -c addr'
 alias pingg='ping 8.8.8.8'
 alias reloadbashrc='echo "source ~/.bashrc" && source ~/.bashrc'
