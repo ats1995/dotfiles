@@ -128,3 +128,15 @@ fco()
 {
     find $1 -type f -print | wc -l
 }
+
+dcmp()
+{
+    if [ $1 = rslsync ]
+    then
+        docker-compose -f ${HOME}/compose-rslsync/docker-compose.yml pull resilio-sync
+      # Snapshot the containers volumes.
+        docker-compose -f ${HOME}/compose-rslsync/docker-compose.yml up -d
+    else
+        echo 'Not a known service.'
+    fi
+}
