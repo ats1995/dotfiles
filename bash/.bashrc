@@ -61,10 +61,11 @@ NORMAL="\[\033[0m\]"
 RED="\[\033[31;1m\]"
 YELLOW="\[\033[33;1m\]"
 WHITE="\[\033[37;1m\]"
+DIMWHITE="\[\033[37;2m\]"
 GREEN="\[\033[32;1m\]"
 CYAN="\[\033[36;1m\]"
-SMILEY="${WHITE}:-|${NORMAL}"
-FROWNY="${RED}:-\$${NORMAL}"
+SMILEY="${RESET}\[\033[2m\]:|${NORMAL}"
+FROWNY="${RED}:\$${NORMAL}"
 SELECT="if [ \$? = 0 ]; then echo \"${SMILEY}\"; else echo \"${FROWNY}\"; fi"
 
 # Throw it all together 
@@ -74,11 +75,11 @@ PS1="${RESET}${GREEN}\u${NORMAL}@${YELLOW}\h${NORMAL} \`${SELECT}\` "
     if [ "$(hostname)" = 'hodepute' ]; then
         PS1="${RESET}${GREEN}\u${NORMAL}@${GREEN}\h \w ${NORMAL}\`${SELECT}\` "
     elif [ "$(hostname)" = 'hjorne-skap' ]; then
-        PS1="${RESET}${GREEN}\u${NORMAL}@${RED}\h${NORMAL} \`${SELECT}\` "
+        PS1="${RESET}${GREEN}\u${NORMAL}@${RED}\h \w ${NORMAL}\`${SELECT}\` "
     elif [ "$(hostname)" = 'localhost' ]; then # limbo
-        PS1="${RESET}${CYAN}\u${NORMAL}@${YELLOW}\h${NORMAL} \`${SELECT}\` "
+        PS1="${RESET}${GREEN}\u${NORMAL}@${CYAN}\h \w ${NORMAL}\`${SELECT}\` "
     elif [ "$(hostname)" = 'vuserv' ]; then
-        PS1="${RESET}${GREEN}\u${NORMAL}@${YELLOW}\h${NORMAL} \`${SELECT}\` "
+        PS1="${RESET}${GREEN}\u${NORMAL}@${YELLOW}\h \w ${NORMAL}\`${SELECT}\` "
     else
         PS1='${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     fi
