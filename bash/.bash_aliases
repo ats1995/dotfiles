@@ -11,5 +11,5 @@ alias dfh='echo "Excluding loop and tmpfs:" && df -h | grep -v "/dev/loop" | gre
 alias sshh='ssh alkas@10.0.73.8'
 alias timeit='date && time '
 alias iperf3c='iperf3 -c 10.0.73.8 -R -i 2 -t 20'
-alias config='/usr/bin/git --work-tree=$HOME/dotfiles'
+alias config='/usr/bin/git --git-dir=$HOME/dotfiles/.git --work-tree=$HOME/dotfiles'
 alias dockdbox='docker exec dropbox dropbox filestatus'
