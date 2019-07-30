@@ -73,13 +73,13 @@ PS1="${RESET}${GREEN}\u${NORMAL}@${YELLOW}\h${NORMAL} \`${SELECT}\` "
 
 #if [ "$color_prompt" = yes ]; then
     if [ "$(hostname)" = 'hodepute' ]; then
-        PS1="${RESET}${GREEN}\u${NORMAL}@${GREEN}\h \w ${NORMAL}\`${SELECT}\` "
+        PS1="${RESET}${GREEN}\u${NORMAL}@${GREEN}\h \[\033[2m\]\w ${NORMAL}\`${SELECT}\` "
     elif [ "$(hostname)" = 'hjorne-skap' ]; then
-        PS1="${RESET}${GREEN}\u${NORMAL}@${RED}\h \w ${NORMAL}\`${SELECT}\` "
+        PS1="${RESET}${GREEN}\u${NORMAL}@${RED}\h \[\033[2m\]\w ${NORMAL}\`${SELECT}\` "
     elif [ "$(hostname)" = 'localhost' ]; then # limbo
-        PS1="${RESET}${GREEN}\u${NORMAL}@${CYAN}\h \w ${NORMAL}\`${SELECT}\` "
+        PS1="${RESET}${GREEN}\u${NORMAL}@${CYAN}\h \[\033[2m\]\w ${NORMAL}\`${SELECT}\` "
     elif [ "$(hostname)" = 'vuserv' ]; then
-        PS1="${RESET}${GREEN}\u${NORMAL}@${YELLOW}\h \w ${NORMAL}\`${SELECT}\` "
+        PS1="${RESET}${GREEN}\u${NORMAL}@${YELLOW}\h \[\033[2m\]\w ${NORMAL}\`${SELECT}\` "
     else
         PS1='${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     fi
