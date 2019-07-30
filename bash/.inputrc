@@ -1,0 +1,31 @@
+set colored-stats on
+set completion-ignore-case on
+set completion-map-case on
+set expand-tilde off
+set match-hidden-files on
+set page-completions off
+#set show-all-if-ambiguous on
+set show-all-if-unmodified on
+set menu-complete-display-prefix on
+TAB: menu-complete
+"\e[Z": menu-complete-backward
+
+# emacs mode
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
+# vi mode
+set editing-mode vi
+$if mode=vi
+set keymap vi-command
+# these are for vi-command mode
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+set keymap vi-insert
+# these are for vi-insert mode
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+"\C-l": clear-screen
+"\C-n": next-history
+"\C-p": previous-history
+$endif
