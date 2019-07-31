@@ -71,7 +71,7 @@ SELECT="if [ \$? = 0 ]; then echo \"${SMILEY}\"; else echo \"${FROWNY}\"; fi"
 # Throw it all together 
 PS1="${RESET}${GREEN}\u${NORMAL}@${YELLOW}\h${NORMAL} \`${SELECT}\` "
 
-#if [ "$color_prompt" = yes ]; then
+if [ "$color_prompt" = yes ]; then
     if [ "$(hostname)" = 'hodepute' ]; then
         PS1="${RESET}${GREEN}\u${NORMAL}@${GREEN}\h \[\033[2m\]\w ${NORMAL}\`${SELECT}\` "
     elif [ "$(hostname)" = 'hjorne-skap' ]; then
@@ -87,9 +87,9 @@ PS1="${RESET}${GREEN}\u${NORMAL}@${YELLOW}\h${NORMAL} \`${SELECT}\` "
     else
         PS1='${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     fi
-#else
-#    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-#fi
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
 #if [ "$color_prompt" = yes ]; then
 #    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 #else
