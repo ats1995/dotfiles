@@ -7,7 +7,30 @@ tree \
 ncdu \
 git
 
-stow \ #--verbose=2 \
+if [ ! -d ~/bak.dotfiles ]; then
+    mkdir ~/bak.dotfiles
+    echo 'created bak.dotfiles'
+fi
+declare -a arr=(".bashrc"
+                ".bash_aliases"
+                ".inputrc"
+                ".test"
+                ".toprc"
+                ".vimrc"
+                )
+for i in "${arr[@]}"
+do
+    if [ -L ~/$i ]; then
+        rm ~/$i
+        echo "removed symlink $i"
+    fi
+    if [ -f ~/$i ]; then
+        mv ~/$i ~/bak.dotfiles
+        echo "moved $i"
+    fi
+done
+stow \
 bash \
 top  \
-vim  \
+vim
+echo 'stowed dotfiles'
