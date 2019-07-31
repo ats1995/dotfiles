@@ -17,6 +17,7 @@ declare -a arr=(".bashrc"
                 ".test"
                 ".toprc"
                 ".vimrc"
+                ".vim"
                 )
 for i in "${arr[@]}"
 do
@@ -24,9 +25,12 @@ do
         rm ~/$i
         echo "removed symlink $i"
     fi
-    if [ -f ~/$i ]; then
+    if [ -f ~/$i ] ; then
         mv ~/$i ~/bak.dotfiles
-        echo "moved $i"
+        echo "moved file $i"
+    elif [ -d ~/$i ] ; then
+        mv ~/$i ~/bak.dotfiles
+        echo "moved directory $i"
     fi
 done
 stow -d ~/dotfiles/ -t ~/ \
