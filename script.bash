@@ -29,7 +29,7 @@ do
         echo "moved $i"
     fi
 done
-stow \
+stow -d ~/dotfiles/ -t ~/ \
 bash \
 top  \
 vim
