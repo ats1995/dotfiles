@@ -34,7 +34,8 @@ do
     fi
 done
 stow -d ~/dotfiles/ -t ~/ \
-bash \
-top  \
-vim
+  bash \
+  top  \
+  vim
 echo 'stowed dotfiles'
+source ~/.bashrc
