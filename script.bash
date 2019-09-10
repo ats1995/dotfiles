@@ -14,6 +14,7 @@ fi
 declare -a arr=(".bashrc"
                 ".bash_aliases"
                 ".inputrc"
+                ".screenrc"
                 ".test"
                 ".toprc"
                 ".vimrc"
@@ -35,6 +36,7 @@ do
 done
 stow -d ~/dotfiles/ -t ~/ \
   bash \
+  screen \
   top  \
   vim
 echo 'stowed dotfiles'
