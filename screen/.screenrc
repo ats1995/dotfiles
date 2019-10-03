@@ -24,15 +24,19 @@
 #nethack on
 
 #defflow on # will force screen to process ^S/^Q
+
+# from https://blog.thibaut-rousseau.com/2015/12/04/screen-terminal-multiplexer.html
 deflogin on
-#autodetach off
+autodetach on
+defutf8 on
+altscreen on
 
 # turn visual bell on
 vbell on
 vbell_msg "   Wuff  ----  Wuff!!  "
 
 # define a bigger scrollback, default is 100 lines
-defscrollback 4096
+defscrollback 8192
 
 # ------------------------------------------------------------------------------
 # SCREEN KEYBINDINGS
@@ -106,3 +110,13 @@ defnonblock 5
 # screen -t mail 8 mutt
 # screen -t daemon 9 tail -f /var/log/daemon.log
 
+# status bar
+# %{= wk}: set the color to white on black
+# %S: screen session name
+# %-w: previous windows
+# %{= kw}: set the color to black on white
+# %n: current window number
+# %t: current window title
+# %{= wk}: set the color to white on black
+# %+w: next windows
+caption always "%{= wk}%S: %-w%{= kw}%n %t%{= wk}%+w"
