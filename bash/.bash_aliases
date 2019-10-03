@@ -20,3 +20,6 @@ alias runborgbackup='echo "sudo mount LABEL=borgbackup /media/bbackup/ && sudo /
 alias dateform='date "+%Y-%m-%d_%H%M%S-%Z"'
 alias eip='curl https://ipinfo.io/ip'
 alias pleeeease='sudo $(fc -ln -1)'
+alias sn='screen -S'
+alias sl='screen -ls'
+alias sr='screen -R'
