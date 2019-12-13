@@ -1,0 +1,71 @@
+#!/bin/bash
+# Modified far and wide from http://tldp.org/LDP/abs/html/timedate.html
+
+# Thsi script checks /var/log/runborg.log for the most recent entry
+# and when latest entry not containing the most recent entry's disk.
+# This is to check for when the backup disks was last swapped.
+# Lastly it prints these two stats to motd
+
+
+# Current UNIX time
+CURRENTTIME=$(date '+%s')
+
+# Expected log format:
+# 2019-12-08 22:46:56 +0100 borg successful on WD Red
+# Logfile to check
+BLOGFILE="/var/log/runborgbackup.log"
+
+# Last run backup log entry
+RUNBLOG=$(tail --lines 1 $BLOGFILE)
+# Time of last backup. Selec first three coloumns time,
+# date, and time-zone. Store as UNIX time
+LASTBAK=$(echo $RUNBLOG | \
+          awk -v var="$RUNBLOG" '{print $1, $2, $3}' | \
+          date --file - '+%s')
+
+# Last backup log entry on prev HDD swap
+# Filter away entries containing the last disk
+# and return the last entry on prev disk's entries
+RUNBLOGSWAP=$(echo $RUNBLOG | \
+          awk '{print $(NF-1)" "$NF}' | \
+          grep --invert-match --file - $BLOGFILE | \
+          tail --lines 1)
+# Date of last backup on prev HDD swap. Selec first three
+# coloumns time, date, and time-zone. Store as UNIX time
+LASTSWAP=$(echo $RUNBLOGSWAP | \
+          awk '{print $1, $2, $3}' | \
+          date --file - '+%s')
+
+# Converts UNIX time difference to days, hours, minuites, and seconds
+interprettime () {
+  local T=$1
+  DAYS=$((T/60/60/24))
+  HOURS=$((T/60/60%24))
+  MINUITES=$((T/60%60))
+  TSECONDS=$((T%60))
+
+  # Sets plural 's'
+  if [ $DAYS != 1 ]; then
+      DAYPLUR=s
+  fi
+}
+
+# Prints something like:
+# > Borg:
+# > 18:54:48 since last backup on WD Red
+printf 'Borg backup:\n'
+interprettime "$(( $CURRENTTIME - $LASTBAK ))"
+if (( DAYS > 0 )); then
+  printf '%s day%s, ' "$DAYS" "$DAYPLUR"
+fi
+printf '%02d:%02d:%02d ' "$HOURS" "$MINUITES" "$TSECONDS"
+printf 'since last backup on %s\n' "$(echo $RUNBLOG |\
+                                      awk '{print $(NF-1)" "$NF}')"
+# Prints something like:
+# > 13 days, 00:33:07 since last dest HDD swap
+interprettime "$(( $CURRENTTIME - $LASTSWAP ))"
+if (( DAYS > 0 )); then
+  printf '%s day%s, ' "$DAYS" "$DAYPLUR"
+fi
+printf '%02d:%02d:%02d ' "$HOURS" "$MINUITES" "$TSECONDS"
+printf 'since last dest HDD swap\n\n'
