@@ -1,6 +1,10 @@
 #!/bin/bash
 # Script to test a disk hard for fails. Run as root
 
+if [ -z "$1" ]; then
+  echo "Please specify device"
+  exit
+fi
 baddevice=$1
 # Greps for device name and discards the two first words ("Device model")
 # Then sanitizes and removes trailing _ (?!)
@@ -57,7 +61,7 @@ countdown 10 "before proceeding"
 startdate=$(date +%s)
 sleep 1
 badbfile=${badname}_$(date "+%F_%H%M%S-%z")".badblocks"
-#badblocks -svw -o "${badname}_$(date "+%F_%H%M%S-%z").badblocks" ###"${baddevice}"
+badblocks -svw -o "${badname}_$(date "+%F_%H%M%S-%z").badblocks" "${baddevice}"
 printf 'Badblocks finished on %s after ' "$(date "+%F %T %z")"
 sectotime $(($(date +%s) - ${startdate}))
 printf '%02d:%02d:%02d\n' "$HOURS" "$MINUITES" "$TSECONDS"

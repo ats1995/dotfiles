@@ -174,3 +174,6 @@ dcmp()
         echo 'Not a known service.'
     fi
 }
+
+
+export EDITOR=/usr/bin/vim
