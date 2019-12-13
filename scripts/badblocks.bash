@@ -66,7 +66,7 @@ printf 'Started SMART on %s\n' "$badname"
 
 while $(smartctl -c /dev/sda | grep --quiet -i " of test remaining"); do
   echo "SMART test running, sleeping 1min"
-  sleep 1m
+  sleep 10m
 done
 
 printf 'Badblocks and smartctl finished on %s after ' "$(date "+%F %T %z")"
