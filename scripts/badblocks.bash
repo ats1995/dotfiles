@@ -71,7 +71,7 @@ printf 'Started SMART on %s\n' "$badname"
 
 smartwait="10m"
 while $(smartctl -c $baddevice | grep --quiet -i " of test remaining"); do
-  printf 'SMART test running, sleeping %s' "$smartwait"
+  printf 'SMART test running, sleeping %s\n' "$smartwait"
   sleep "$smartwait"
 done
 
