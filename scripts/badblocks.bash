@@ -59,6 +59,7 @@ fi
 printf '\n'
 countdown 10 "before proceeding"
 startdate=$(date +%s)
+printf 'Started: %s\n' "$(date "+%F %T %z")"
 sleep 1
 badbfile=${badname}_$(date "+%F_%H%M%S-%z")".badblocks"
 badblocks -svw -o "${badname}_$(date "+%F_%H%M%S-%z").badblocks" "${baddevice}"
