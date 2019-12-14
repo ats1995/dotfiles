@@ -45,13 +45,13 @@ sectotime () {
   fi
 }
 
-read -p "Are you sure? ALL data will be lost on ${badname}" -n 1 -r
+read -p "Are you sure? ALL data will be lost on ${badname} " -n 1 -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   printf '\nAborted\n'
   exit
 fi
 printf '\n'
-read -p "Are you REALLY sure? Badblocks will overwrite the disk FOUR times! There is NO way back!" -n 1 -r
+read -p "Are you REALLY sure? Badblocks will overwrite the disk FOUR times! There is NO way back! " -n 1 -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   printf '\nAborted\n'
   exit
@@ -68,9 +68,10 @@ printf '%02d:%02d:%02d\n' "$HOURS" "$MINUITES" "$TSECONDS"
 smartctl --quietmode=silent -t short ${baddevice}
 printf 'Started SMART on %s\n' "$badname"
 
-while $(smartctl -c /dev/sda | grep --quiet -i " of test remaining"); do
-  echo "SMART test running, sleeping 1min"
-  sleep 10m
+smartwait="10m"
+while $(smartctl -c $baddevice | grep --quiet -i " of test remaining"); do
+  printf 'SMART test running, sleeping %s' "$smartwait"
+  sleep "$smartwait"
 done
 
 printf 'Badblocks and smartctl finished on %s after ' "$(date "+%F %T %z")"
