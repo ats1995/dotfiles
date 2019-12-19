@@ -5,7 +5,8 @@ stow \
 iperf3 \
 tree \
 ncdu \
-git
+git \
+man
 
 if [ ! -d ~/bak.dotfiles ]; then
     mkdir ~/bak.dotfiles

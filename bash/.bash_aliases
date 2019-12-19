@@ -20,9 +20,9 @@ alias runborgbackup='echo "sudo mount LABEL=borgbackup /media/bbackup/ && sudo /
 alias dateform='date "+%Y-%m-%d_%H%M%S-%Z"'
 alias eip='curl https://ipinfo.io/ip'
 alias pleeeease='sudo $(fc -ln -1)'
-alias sn='screen -S'
-alias sl='screen -ls'
-alias sr='screen -R'
+alias sn='screen -S'  # Create now session,takes a session name
+alias sl='screen -ls' # List sessions
+alias sr='screen -R'  # Reconnect to session,takes a session name
 alias weatherb='curl http://wttr.in/bryne'
 alias catborg='cat /var/log/runborgbackup.log'
 alias less='less -i'
