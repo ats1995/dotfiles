@@ -66,8 +66,9 @@ badblocks -svw -o "${badname}_$(date "+%F_%H%M%S-%z").badblocks" "${baddevice}"
 printf 'Badblocks finished on %s after ' "$(date "+%F %T %z")"
 sectotime $(($(date +%s) - ${startdate}))
 printf '%02d:%02d:%02d\n' "$HOURS" "$MINUITES" "$TSECONDS"
-smartctl --quietmode=silent -t short ${baddevice}
-printf 'Started SMART on %s\n' "$badname"
+smartctl --quietmode=silent -t long ${baddevice}
+smartstart=$(date +%s)
+printf 'Started SMART on %s on %s\n' "$badname" "$(date -d "@$smartstart" "+%F %T %z")"
 
 smartwait="10m"
 while $(smartctl -c $baddevice | grep --quiet -i " of test remaining"); do
@@ -75,8 +76,8 @@ while $(smartctl -c $baddevice | grep --quiet -i " of test remaining"); do
   sleep "$smartwait"
 done
 
-printf 'Badblocks and smartctl finished on %s after ' "$(date "+%F %T %z")"
-sectotime $(($(date +%s) - ${startdate}))
+printf 'Smartctl finished on %s after ' "$(date "+%F %T %z")"
+sectotime $(($(date +%s) - ${smartstart}))
 printf '%02d:%02d:%02d\n' "$HOURS" "$MINUITES" "$TSECONDS"
 
 smartctl -a $baddevice >> ${badbfile}
