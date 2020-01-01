@@ -10,10 +10,7 @@ baddevice=$1
 # Then sanitizes and removes trailing _ (?!)
 badname=$(smartctl -a ${baddevice} |\
           grep -i "Device model" |\
-          awk '{for (i=3; i<=NF; i++) print $i}' |\
-          sed 's/\//_/g' |\
-          tr '\n' '_' |\
-          sed 's/_$//')
+          sed 's/.*://;s/^ *//g;s/[\/ ]/_/g')
 
 # $1 = # of seconds
 # $@ = What to print after "Waiting n seconds"
@@ -45,18 +42,31 @@ sectotime () {
   fi
 }
 
+# ~80MB/s is somewhat realistic on a HDD, 288GB/h
+BpersHDD='80000000'
+BpersSSD='250000000'
+
 read -p "Are you sure? ALL data will be lost on ${badname} " -n 1 -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   printf '\nAborted\n'
   exit
 fi
 printf '\n'
+drivespace=$(smartctl -a $baddevice | grep -i "User Capacity:" | sed -E 's/.*://;s/^ *//g;s/ bytes.*$//;s/[^0-9]*//g')
+if $(smartctl -a $baddevice | grep --quiet -i 'Solid State Device'); then
+  printf 'SSD: %sGB, ballpark speed of %sMB/s will take aprox %s hours to complete\n' \
+  "$(( drivespace/1000/1000/1000 ))" "$(( BpersSSD/1000/1000 ))" "$(( drivespace*8/BpersSSD/3600 ))"
+else
+  printf 'HDD: %sGB, ballpark speed of %sMB/s will take aprox %s hours to complete\n' \
+  "$(( drivespace/1000/1000/1000 ))" "$(( BpersHDD/1000/1000 ))" "$(( drivespace*8/BpersHDD/3600 ))"
+fi
 read -p "Are you REALLY sure? Badblocks will overwrite the disk FOUR times! There is NO way back! " -n 1 -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   printf '\nAborted\n'
   exit
 fi
 printf '\n'
+
 countdown 10 "before proceeding"
 startdate=$(date +%s)
 printf 'Started: %s\n' "$(date "+%F %T %z")"
@@ -82,3 +92,10 @@ printf '%02d:%02d:%02d\n' "$HOURS" "$MINUITES" "$TSECONDS"
 
 smartctl -a $baddevice >> ${badbfile}
 printf 'SMART stats written to %s\n' "$badbfile"
+
+# TODO
+# *Run smartctl -a only once
+#   *Deal with USB drives too (-d sat)
+# *Deprecate sectotime ()
+# *Automatic performance test instead of hard BpersSSD/HDD
+# *Add logging of badblocks run, and general times
