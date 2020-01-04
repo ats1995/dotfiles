@@ -1,0 +1,30 @@
+#!/bin/bash
+# Checks for running services, both systemd and docker containers
+# Specific for hjorne-skap
+printf '\n'
+
+dockercont=( resilio unifi dropbox )
+#docker container ls --format "table {{.Names}}\t{{.CreatedAt}}\t{{.Status}}"
+for i in "${dockercont[@]}"; do
+  if docker ps | grep --quiet -i $i; then
+    printf '%-24srunning\n' "$i"
+  else
+    printf '%-24sNOT RUNNING!\n' "$i"
+  fi
+done
+
+services=( smbd.service docker.service syncthing@syncthing )
+for i in "${services[@]}"; do
+  printf '%-24s%s\n' "$i" "$(systemctl is-active $i)"
+done
+
+# Uses only first UPS
+nut_ups=$(upsc -l 2>/dev/null | awk '{ print $1 }')
+ups_mfr=$(upsc ${nut_ups} ups.mfr 2>&1 | grep --invert-match '^Init SSL')
+ups_mode=$(upsc ${nut_ups} ups.model 2>&1 | grep --invert-match '^Init SSL')
+ups_charge=$(upsc ${nut_ups} battery.charge 2>&1 | grep --invert-match '^Init SSL')
+#printf '%s %s: %s%% battery\n' "$ups_mfr" "$ups_mode" "$ups_charge"
+printf '\n%-24s%s%% battery\n' "$ups_mfr $ups_mode: " "$ups_charge"
+if ! upsc $nut_ups ups.status | grep --quiet -i OL; then
+  printf 'ON BATTERY!!!\n'
+fi

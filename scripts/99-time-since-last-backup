@@ -15,6 +15,11 @@ CURRENTTIME=$(date '+%s')
 # Logfile to check
 BLOGFILE="/var/log/runborgbackup.log"
 
+if [ ! -f "$BLOGFILE" ]; then
+  printf 'No borg log file found in %s\n\n' "$BLOGFILE"
+  exit
+fi
+
 # Last run backup log entry
 RUNBLOG=$(tail --lines 1 $BLOGFILE)
 # Time of last backup. Selec first three coloumns time,

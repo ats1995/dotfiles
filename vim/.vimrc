@@ -5,3 +5,6 @@ set smartcase
 set number
 set numberwidth=2
 set relativenumber
+set backupdir=.backup/,~/.backup/,/tmp//
+set directory=.swp/,~/.swp/,/tmp//
+set undodir=.undo/,~/.undo/,/tmp//
