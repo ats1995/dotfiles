@@ -77,18 +77,18 @@ SELECT="if [ \$? = 0 ]; then echo \"${SMILEY}\"; else echo \"${FROWNY}\"; fi"
 
 if [ "$(hostname)" = 'hodepute' ]; then
 #    PS1="${RESET}${GREEN}\u${NORMAL}@${GREEN}\h \[\033[2m\]\w ${NORMAL}\`${SELECT}\` "
-    PS1="┌[${GREEN}\u${NORMAL}@${GREEN}\h${NORMAL}:${GREEN}${DARK}\w${NORMAL}]─[\t]\n└─╼ \`${SELECT}\` "
+    PS1="┌[${RESET}${GREEN}\u${NORMAL}@${GREEN}\h${NORMAL}:${GREEN}${DARK}\w${NORMAL}]─[\t]\n└─╼ \`${SELECT}\` "
 elif [ "$(hostname)" = 'hjorne-skap' ]; then
     PS1="${RESET}${GREEN}\u${NORMAL}@${RED}\h \[\033[2m\]\w ${NORMAL}\`${SELECT}\` "
 elif [ "$(hostname)" = 'localhost' ]; then # limbo
     PS1="${RESET}${GREEN}\u${NORMAL}@${CYAN}\h \[\033[2m\]\w ${NORMAL}\`${SELECT}\` "
 elif [ "$(hostname)" = 'vuserv' ]; then
-   # PS1="${RESET}${GREEN}\u${NORMAL}@${YELLOW}\h \[\033[2m\]\w ${NORMAL}\`${SELECT}\` "
-
-       # Lawrence Systems' Toms prompt
-        PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root\[\033[01;33m\]@\[\033[01;96m\]\h'; else echo "${GREEN}\u${RESET}@${YELLOW}\h"; fi)\[\033[0;31m\]]\342\224\200[\t]\342\224\200[\[\033[0;32m\]\w\[\033[0;31m\]]\n\[\033[0;31m\]\342\224\224\342\224\200\342\224\200\342\225\274 \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\]"
-#        PS1='┌[\u@\h][\w]\n└╼ \$ '
-#        PS1="┌[\t]-[\u@\h:\w]\n└─╼ \`${SELECT}\` "
+#    PS1="${RESET}${GREEN}\u${NORMAL}@${YELLOW}\h \[\033[2m\]\w ${NORMAL}\`${SELECT}\` "
+    # Lawrence Systems' Toms prompt
+    PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root\[\033[01;33m\]@\[\033[01;96m\]\h'; else echo "${GREEN}\u${RESET}@${YELLOW}\h"; fi)\[\033[0;31m\]]\342\224\200[\t]\342\224\200[\[\033[0;32m\]\w\[\033[0;31m\]]\n\[\033[0;31m\]\342\224\224\342\224\200\342\224\200\342\225\274 \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\]"
+#    PS1='┌[\u@\h][\w]\n└╼ \$ '
+else
+    PS1="┌[\u@\h:\w]─[\t]\n└─╼ \`${SELECT}\` "
 fi
 
 unset color_prompt force_color_prompt
