@@ -1,12 +1,12 @@
 #!/bin/bash
-sudo apt install --yes \
-vim \
-stow \
-iperf3 \
-tree \
-ncdu \
-git \
-man
+#sudo apt install --yes \
+#vim \
+#stow \
+#iperf3 \
+#tree \
+#ncdu \
+#git \
+#man
 
 if [ ! -d ~/bak.dotfiles ]; then
     mkdir ~/bak.dotfiles
@@ -20,6 +20,7 @@ declare -a arr=(".bashrc"
                 ".toprc"
                 ".vimrc"
                 ".vim"
+                ".config/youtube-dl/config"
                 )
 for i in "${arr[@]}"
 do
@@ -39,6 +40,7 @@ stow -d ~/dotfiles/ -t ~/ \
   bash \
   screen \
   top  \
-  vim
+  vim \
+  youtube-dl
 echo 'stowed dotfiles'
 source ~/.bashrc
