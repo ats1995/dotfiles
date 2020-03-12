@@ -1,13 +1,16 @@
 #!/bin/bash
 # prune docker images and btrfs subvolume snapshots
-dkr_snap_date="2020-01-11"		# snapshot date to delete
-snap_path="/media/pool/snaptshots/"
+dkr_snap_date="2019-11"
+snap_path="/media/pool/snapshots/"
+#dkr_app="unifi-ctrl"
 dkr_app="resilio"
 
-echo 'Alfa script, DANGER! Waiting 30s'
+echo 'Alfa script, DANGER! Waiting 5s'
+echo "Deleting ${dkr_app} from ${dkr_snap_date}"
 
-wait 30
+sleep 5
 
-find ${snap_path} -maxdepth 1 -name "$dkr_app_$dkr_snap_date*" -exec sudo btrfs subvolume delete {} \;
+sudo btrfs subvolume delete $(find ${snap_path} -maxdepth 1 -name "${dkr_app}_${dkr_snap_date}*")
+#find ${snap_path} -maxdepth 1 -name "${dkr_app}_${dkr_snap_date}*"
 
 docker container rm $(docker container ls -a --format "table {{.Names}}" | grep -i $dkr_app | grep -i $dkr_snap_date) 
