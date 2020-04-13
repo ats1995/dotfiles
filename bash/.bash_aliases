@@ -26,3 +26,4 @@ alias sr='screen -R'  # Reconnect to session,takes a session name
 alias weatherb='curl http://wttr.in/bryne'
 alias catborg='cat /var/log/runborgbackup.log'
 alias less='less -i'
+alias temps='uptime && sensors && sudo hddtemp /dev/sd?'
