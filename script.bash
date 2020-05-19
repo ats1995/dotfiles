@@ -6,6 +6,7 @@
 #tree \
 #ncdu \
 #git \
+#dig \
 #man
 
 if [ ! -d ~/bak.dotfiles ]; then
@@ -20,6 +21,7 @@ declare -a arr=(".bashrc"
                 ".toprc"
                 ".vimrc"
                 ".vim"
+                ".digrc"
                 ".config/youtube-dl/config"
                 )
 for i in "${arr[@]}"
@@ -41,6 +43,7 @@ stow -d ~/dotfiles/ -t ~/ \
   screen \
   top  \
   vim \
+  dig \
   youtube-dl
 echo 'stowed dotfiles'
 source ~/.bashrc
