@@ -56,7 +56,7 @@ else
     AudioOnly='--extract-audio'
 fi
 
-youtube-dl --verbose \
+youtube-dl \
     --format $DlFormat $AudioOnly \
     --write-all-thumbnails \
     --write-info-json \
