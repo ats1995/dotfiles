@@ -5,10 +5,14 @@ if [ -z "$1" ]; then
     echo "No url specified"
     exit
 fi
+
+case $( uname --operating-system ) in
+Android) DlPath="/storage/emulated/0/";;
+esac
+
 # This is a general-purpose function to ask Yes/No questions in Bash, either
 # with or without a default answer. It keeps repeating the question until it
 # gets a valid answer.
-
 ask() {
     # https://djm.me/ask
     local prompt default reply
@@ -39,8 +43,8 @@ ask() {
 
         # Check if the reply is valid
         case "$reply" in
-            V*|v*) return 0 ;;
-            A*|a*) return 1 ;;
+            V*|v*) DlType="Movies/termux/" && return 0 ;;
+            A*|a*) DlType="Music/termux/" && return 1 ;;
         esac
 
     done
@@ -49,7 +53,7 @@ ask() {
 url=$1
 if ask "Download video, or audio only?" V; then
     echo "Video"
-    DlFormat='bestvideo[height<=1080]+bestaudio/best[height<=1080]'
+    DlFormat='bestvideo[height<=720]+bestaudio/best[height<=1080]'
 else
     echo "Audio only"
     DlFormat='bestaudio/best[height<=1080]'
@@ -66,7 +70,7 @@ youtube-dl \
     --ignore-errors \
     --continue \
     --write-thumbnail \
-    --output '%(uploader)s - %(upload_date)s - %(title)s - %(id)s.%(ext)s' \
+    --output "${DlPath}""${DlType}"'%(uploader)s - %(upload_date)s - %(title)s - %(id)s.%(ext)s' \
     "$url"
 
 # Send android notification when done
