@@ -6,8 +6,14 @@ if [ -z "$1" ]; then
     exit
 fi
 
+DlPath="/storage/emulated/0/"
+
 case $( uname --operating-system ) in
-Android) DlPath="/storage/emulated/0/";;
+Android) if [ ! -d "$DlPath" ]; then
+             echo "Standard android path /storage/emulated/0/ not found"
+             DlPath=""
+         fi
+;;
 esac
 
 # This is a general-purpose function to ask Yes/No questions in Bash, either
