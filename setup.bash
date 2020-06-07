@@ -6,8 +6,11 @@
 #tree \
 #ncdu \
 #git \
-#dig \
+#dnsutlis \
+#stow \
 #man
+
+DATE=$(date "+%Y-%m-%d_%H%M%S-%Z")
 
 if [ ! -d ~/bak.dotfiles ]; then
     mkdir ~/bak.dotfiles
@@ -17,7 +20,6 @@ declare -a arr=(".bashrc"
                 ".bash_aliases"
                 ".inputrc"
                 ".screenrc"
-                ".test"
                 ".toprc"
                 ".vimrc"
                 ".vim"
@@ -29,13 +31,9 @@ do
     if [ -L ~/$i ]; then
         rm ~/$i
         echo "removed symlink $i"
-    fi
-    if [ -f ~/$i ] ; then
+    elif [ -f ~/$i ] ; then
         mv ~/$i ~/bak.dotfiles
         echo "moved file $i"
-    elif [ -d ~/$i ] ; then
-        mv ~/$i ~/bak.dotfiles
-        echo "moved directory $i"
     fi
 done
 stow -d ~/dotfiles/ -t ~/ \
