@@ -7,5 +7,4 @@
 --ignore-errors 
 --continue 
 --write-thumbnail 
---download-archive youtube-dl_download-archive.txt
 --output '%(uploader)s - %(upload_date)s - %(title)s - %(id)s.%(ext)s'
