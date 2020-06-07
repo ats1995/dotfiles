@@ -7,7 +7,7 @@ alias lfs='echo "!squashfs" && lsblk --fs | grep -v squashfs'
 alias iptraffic='ip -d -s -h addr | grep ": bytes" -A 2'
 alias dkrls='docker container ls -a --format "table {{.Image}}\t{{.CreatedAt}}\t{{.Status}}\t{{.Names}}\t{{.Size}}\t{{.Networks}}"'
 alias alied='vim ~/.bash_aliases'
-alias dfh='echo "Excluding loop and tmpfs:" && df -h | grep -v "/dev/loop" | grep -v tmpfs'
+alias dfh='echo "Excluding loop, squashfs and tmpfs:" && df --human-readable --exclude-type=tmpfs -x tmpfs | grep --invert-match "/dev/loop"'
 alias sshh='ssh alkas@10.0.73.8'
 alias timeit='date && time '
 alias iperf3c='iperf3 -c 10.0.73.8 -R -i 2 -t 20'
@@ -20,9 +20,9 @@ alias runborgbackup='echo "sudo mount LABEL=borgbackup /media/bbackup/ && sudo /
 alias dateform='date "+%Y-%m-%d_%H%M%S-%Z"'
 alias eip='curl https://ipinfo.io/ip'
 alias pleeeease='sudo $(fc -ln -1)'
-alias sn='screen -S'  # Create now session,takes a session name
+alias sn='screen -S'  # Create new session,takes a session name
 alias sl='screen -ls' # List sessions
-alias sr='screen -R'  # Reconnect to session,takes a session name
+alias sr='screen -R'  # Reconnect to session and creates new if not existing,takes a session name
 alias weatherb='curl http://wttr.in/bryne'
 alias catborg='cat /var/log/runborgbackup.log'
 alias less='less -i'
