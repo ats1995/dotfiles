@@ -3,6 +3,7 @@
 # Specific for hjorne-skap
 printf '\n'
 
+# Check if the specified containers are running
 dockercont=( unifi ) #resilio dropbox 
 #docker container ls --format "table {{.Names}}\t{{.CreatedAt}}\t{{.Status}}"
 for i in "${dockercont[@]}"; do
@@ -13,16 +14,19 @@ for i in "${dockercont[@]}"; do
   fi
 done
 
+# Check if the specified services are running
 services=( smbd.service docker.service syncthing@syncthing )
 for i in "${services[@]}"; do
   printf '%-24s%s\n' "$i" "$(systemctl is-active $i)"
 done
 
+# Check if data in folders have changed in the last 24h (1440m). 
 syncedFolders=( "/media/pool/docker/syncthing/Sleep As Android/" \
                 "/media/pool/docker/syncthing/Signal backups/" \
+                "/media/pool/media/pictures/phone/syncthing/DCIM/" \
                 "/media/pool/media/audio/music/syncthing/GMMP/" )
 for i in "${syncedFolders[@]}"; do
-  if [[ ! $(find "$i" -cmin -1440 -type f) ]]; then
+  if [[ ! $(find "$i" -cmin -4320 -type f) ]]; then
     printf '%-24sNOT changed in 24h!\n' "$(basename "$i")"
   else
     printf '%-24sOk\n' "$(basename "$i")"
