@@ -13,9 +13,11 @@ Android) if [ -d "$AndroidPath" ]; then
              DlPath="$AndroidPath"
              VidDl="Movies/termux/"
              AudioDl="Music/termux/"
+         else
+             echo "Standard android path /storage/emulated/0/ not found"
          fi
 ;;
-*      ) echo "Standard android path /storage/emulated/0/ not found"
+*      ) echo "OS not Android, not setting download path"
 ;;
 esac
 
