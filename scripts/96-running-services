@@ -20,7 +20,7 @@ for i in "${services[@]}"; do
   printf '%-24s%s\n' "$i" "$(systemctl is-active $i)"
 done
 
-# Check if data in folders have changed in the last 24h (1440m). 
+# Check if data in folders have changed in the last 72 (4320min). 
 syncedFolders=( "/media/pool/docker/syncthing/Sleep As Android/" \
                 "/media/pool/docker/syncthing/Signal backups/" \
                 "/media/pool/media/pictures/phone/syncthing/DCIM/" \
