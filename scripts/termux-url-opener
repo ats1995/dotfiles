@@ -6,13 +6,16 @@ if [ -z "$1" ]; then
     exit
 fi
 
-DlPath="/storage/emulated/0/"
+AndroidPath="/storage/emulated/0/"
 
 case $( uname --operating-system ) in
-Android) if [ ! -d "$DlPath" ]; then
-             echo "Standard android path /storage/emulated/0/ not found"
-             DlPath=""
+Android) if [ -d "$AndroidPath" ]; then
+             DlPath="$AndroidPath"
+             VidDl="Movies/termux/"
+             AudioDl="Music/termux/"
          fi
+;;
+*      ) echo "Standard android path /storage/emulated/0/ not found"
 ;;
 esac
 
@@ -49,8 +52,8 @@ ask() {
 
         # Check if the reply is valid
         case "$reply" in
-            V*|v*) DlType="Movies/termux/" && return 0 ;;
-            A*|a*) DlType="Music/termux/" && return 1 ;;
+            V*|v*) DlType="$VidDl"   && return 0 ;;
+            A*|a*) DlType="$AudioDl" && return 1 ;;
         esac
 
     done
@@ -76,6 +79,7 @@ youtube-dl \
     --ignore-errors \
     --continue \
     --write-thumbnail \
+    --no-mtime \
     --output "${DlPath}""${DlType}"'%(uploader)s - %(upload_date)s - %(title)s - %(id)s.%(ext)s' \
     "$url"
 
