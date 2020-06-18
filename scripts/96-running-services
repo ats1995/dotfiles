@@ -27,7 +27,7 @@ syncedFolders=( "/media/pool/docker/syncthing/Sleep As Android/" \
                 "/media/pool/media/audio/music/syncthing/GMMP/" )
 for i in "${syncedFolders[@]}"; do
   if [[ ! $(find "$i" -cmin -4320 -type f) ]]; then
-    printf '%-24sNOT changed in 24h!\n' "$(basename "$i")"
+    printf '%-24sNOT changed in 72h!\n' "$(basename "$i")"
   else
     printf '%-24sOk\n' "$(basename "$i")"
   fi
