@@ -6,6 +6,8 @@
 # This is to check for when the backup disks was last swapped.
 # Lastly it prints these two stats to motd
 
+redcol=$(tput setaf 1)
+normal=$(tput sgr0)
 
 # Current UNIX time
 CURRENTTIME=$(date '+%s')
@@ -60,17 +62,27 @@ interprettime () {
 # > 18:54:48 since last backup on WD Red
 printf 'Borg backup:\n'
 interprettime "$(( $CURRENTTIME - $LASTBAK ))"
+# Color alert if not backed up in 10 days
+if (( DAYS > 10 )); then
+  ALERTCOL=$redcol
+  ALERTNORM=$normal
+fi
 if (( DAYS > 0 )); then
-  printf '%s day%s, ' "$DAYS" "$DAYPLUR"
+  printf '%s%s day%s, %s' "$ALERTCOL" "$DAYS" "$DAYPLUR" "$ALERTNORM"
 fi
 printf '%02d:%02d:%02d ' "$HOURS" "$MINUITES" "$TSECONDS"
-printf 'since last backup on %s\n' "$(echo $RUNBLOG |\
-                                      awk '{print $(NF-1)" "$NF}')"
+printf 'since last backup on %s\n' "$(echo $RUNBLOG | awk '{print $(NF-1)" "$NF}')"
+
 # Prints something like:
 # > 13 days, 00:33:07 since last dest HDD swap
 interprettime "$(( $CURRENTTIME - $LASTSWAP ))"
+# Color alert if not backed up in 10 days
+if (( DAYS > 35 )); then
+  ALERTCOL=$redcol
+  ALERTNORM=$normal
+fi
 if (( DAYS > 0 )); then
-  printf '%s day%s, ' "$DAYS" "$DAYPLUR"
+  printf '%s%s day%s, %s' "$ALERTCOL" "$DAYS" "$DAYPLUR" "$ALERTNORM"
 fi
 printf '%02d:%02d:%02d ' "$HOURS" "$MINUITES" "$TSECONDS"
 printf 'since last dest HDD swap\n\n'

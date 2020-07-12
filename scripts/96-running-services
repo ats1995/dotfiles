@@ -1,7 +1,29 @@
 #!/bin/bash
-# Checks for running services, both systemd and docker containers
+# Checks for:
+# * running services, both systemd and docker containers
+# * UPS status
+# * File changes (that syncing actually happens)
+#
 # Specific for hjorne-skap
 printf '\n'
+
+redcol=$(tput setaf 1)
+normal=$(tput sgr0)
+
+# Defines d, h, m, from seconds
+# NOTE: 1,5h = 1h + 30m , not 90m
+sectotime () {
+  local T=$1
+  DAYS=$((T/60/60/24))
+  HOURS=$((T/60/60%24))
+  MINUITES=$((T/60%60))
+  TSECONDS=$((T%60))
+
+  # Sets plural 's'
+  if [ $DAYS != 1 ]; then
+      DAYPLUR=s
+  fi
+}
 
 # Check if the specified containers are running
 dockercont=( unifi ) #resilio dropbox 
@@ -10,36 +32,57 @@ for i in "${dockercont[@]}"; do
   if docker ps | grep --quiet -i $i; then
     printf '%-24srunning\n' "$i"
   else
-    printf '%-24sNOT RUNNING!\n' "$i"
+    printf '%-24s%sNOT RUNNING!%s\n' "${i}" "${redcol}" "$normal"
   fi
 done
 
 # Check if the specified services are running
 services=( smbd.service docker.service syncthing@syncthing )
 for i in "${services[@]}"; do
-  printf '%-24s%s\n' "$i" "$(systemctl is-active $i)"
+  SERVICESTAT=$(systemctl is-active $i)
+  if [[ $SERVICESTAT = "active" ]]; then
+    printf '%-24s%s\n' "$i" "$SERVICESTAT"
+  else
+    printf '%-24s%s\n' "$i" "${redcol}${SERVICESTAT}${normal}"
+  fi
 done
 
-# Check if data in folders have changed in the last 72 (4320min). 
+# Folders to check for changes (files here should be synced/update regularly)
 syncedFolders=( "/media/pool/docker/syncthing/Sleep As Android/" \
                 "/media/pool/docker/syncthing/Signal backups/" \
                 "/media/pool/media/pictures/phone/syncthing/DCIM/" \
+                "/media/pool/media/pictures/phone/syncthing/Pictures Android/" \
                 "/media/pool/media/audio/music/syncthing/GMMP/" )
+# Check if data in folders have changed in the last 3 days and print status
 for i in "${syncedFolders[@]}"; do
-  if [[ ! $(find "$i" -cmin -4320 -type f) ]]; then
-    printf '%-24sNOT changed in 72h!\n' "$(basename "$i")"
+  # Finds newest file and stores its modtime in seconds
+  NEWESTF=$(find "$i" -type f -not -path "*/.stversions/*" -printf "%T@\n" 2> /dev/null | sort -n | tail -n 1 | cut -d '.' -f 1)
+  NEWAGE=$(( $(date +%s) - ${NEWESTF} ))
+  sectotime $NEWAGE
+  # If nothing has changed in 3 days, throw error with days since last change
+  if (( $DAYS >= 3 )); then
+    printf '%-24s%sNOT changed in %s!!!%s\n' "$(basename "$i")" "${redcol}" "${DAYS} days" "${normal}"
   else
-    printf '%-24sOk\n' "$(basename "$i")"
+    # Return only in the largest of full days, hours, or mins (no rounding)
+    LASTCHANGED=""
+    if [[ $DAYS != 0 ]]; then
+      LASTCHANGED="${DAYS}d"
+    elif [[ $HOURS != 0 ]]; then
+      LASTCHANGED="${HOURS}h"
+    else
+      LASTCHANGED="${MINUITES}m"
+    fi
+    printf '%-24sOk (%s)\n' "$(basename "$i")" "${LASTCHANGED}"
   fi
 done
 
 # Uses only first UPS
 nut_ups=$(upsc -l 2>/dev/null | awk '{ print $1 }')
-ups_mfr=$(upsc ${nut_ups} ups.mfr 2>&1 | grep --invert-match '^Init SSL')
+ups_manufactr=$(upsc ${nut_ups} ups.mfr 2>&1 | grep --invert-match '^Init SSL')
 ups_mode=$(upsc ${nut_ups} ups.model 2>&1 | grep --invert-match '^Init SSL')
 ups_charge=$(upsc ${nut_ups} battery.charge 2>&1 | grep --invert-match '^Init SSL')
-#printf '%s %s: %s%% battery\n' "$ups_mfr" "$ups_mode" "$ups_charge"
-printf '\n%-24s%s%% battery\n' "$ups_mfr $ups_mode: " "$ups_charge"
+printf '\n%-24s%s%% battery\n' "$ups_manufactr $ups_mode: " "$ups_charge"
+# Throw error when on battery power
 if ! upsc $nut_ups ups.status 2>/dev/null | grep --quiet OL; then
-  printf '#################\n# ON BATTERY!!! #\n#################\n'
+  printf '%s#################\n# ON BATTERY!!! #\n#################\n%s' "$redcol" "$normal"
 fi
