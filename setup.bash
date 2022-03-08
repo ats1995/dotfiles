@@ -1,14 +1,39 @@
 #!/bin/bash
-#sudo apt install --yes \
-#vim \
-#stow \
-#iperf3 \
-#tree \
-#ncdu \
-#git \
-#dnsutlis \
-#stow \
-#man
+
+PACKINSTALL=""
+installpackages () {
+  SUDO=""
+  if [[ $EUID -ne 0 ]]; then
+    printf "Not running as root, trying sudo\n"
+    SUDO="sudo"
+  fi
+  ${SUDO} apt update
+  ${SUDO} apt install --yes \
+  vim \
+  stow \
+  iperf3 \
+  tree \
+  ncdu \
+  git \
+  dnsutils \
+  stow \
+  man
+}
+
+while [ "$1" != "" ] ; do
+  case $1 in
+    -i) shift; PACKINSTALL="true";;
+    -?) echo "Error: Invalid option '${1}'" && exit;;
+  esac
+  shift
+done
+
+if [ "${PACKINSTALL}" == "true" ]; then
+  echo "Installing packages"
+  installpackages 
+else
+  echo "Not installing packages"
+fi
 
 DATE=$(date "+%Y-%m-%d_%H%M%S-%Z")
 
