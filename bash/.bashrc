@@ -81,6 +81,8 @@ SELECT="if [ \$? = 0 ]; then echo \"${SMILEY}\"; else echo \"${FROWNY}\"; fi"
 if [ "$(hostname)" = 'hodepute' ]; then
 #    PS1="${RESET}${GREEN}\u${NORMAL}@${GREEN}\h \[\033[2m\]\w ${NORMAL}\`${SELECT}\` "
     PS1="┌[${RESET}${GREEN}\u${NORMAL}@${GREEN}\h${NORMAL}:${GREEN}${DARK}\w${NORMAL}]─[\t]\n└─╼ \`${SELECT}\` "
+elif [ "$(hostname)" = 'StudyPad' ]; then
+    PS1="┌[${RESET}${RED}\u${NORMAL}@${RED}\h${NORMAL}:${GREEN}${DARK}\w${NORMAL}]─[\t]\n└─╼ \`${SELECT}\` "
 elif [ "$(hostname)" = 'hjorne-skap' ]; then
     PS1="${RESET}${GREEN}\u${NORMAL}@${RED}\h \[\033[2m\]\w ${NORMAL}\`${SELECT}\` "
 elif [ "$(hostname)" = 'localhost' ]; then # limbo
