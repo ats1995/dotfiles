@@ -178,4 +178,6 @@ dcmp()
 
 
 export EDITOR=/usr/bin/vim
-uname -r | grep --silent -i wsl && export PATH=$PATH:/mnt/c/Dev/script-collection/
+if uname -r | grep --silent -i wsl; then
+  export PATH=$PATH:/mnt/c/Dev/script-collection/
+fi
